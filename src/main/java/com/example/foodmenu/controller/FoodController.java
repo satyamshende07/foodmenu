@@ -4,6 +4,8 @@ import com.example.foodmenu.entity.Food;
 import com.example.foodmenu.service.FoodService;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
+import com.example.foodmenu.dto.FoodRequestDTO;
+import com.example.foodmenu.dto.FoodResponseDTO;
 
 import java.util.List;
 
@@ -17,23 +19,24 @@ public class FoodController {
     }
 
     @PostMapping("/add-food")
-    public Food addFood(@Valid @RequestBody Food food) {
+    public FoodResponseDTO addFood(@Valid @RequestBody FoodRequestDTO foodRequestDTO) {
 
-        System.out.println("Food Name: " + food.getName());
-        System.out.println("Food Price: " + food.getPrice());
-
-        return foodService.addFood(food);
+        return foodService.addFood(foodRequestDTO);
     }
+
     @GetMapping("/all-food")
-    public List<Food> getAllFood() {
+    public List<FoodResponseDTO> getAllFood() {
         return foodService.getAllFood();
     }
 
     @PutMapping("/update-food/{id}")
-    public Food updateFood(@PathVariable String id,
-                          @Valid @RequestBody Food food) {
-        return foodService.updateFood(id, food);
+    public FoodResponseDTO updateFood(
+            @PathVariable String id,
+            @Valid @RequestBody FoodRequestDTO foodRequestDTO) {
+
+        return foodService.updateFood(id, foodRequestDTO);
     }
+
     @DeleteMapping("/delete-food/{id}")
     public String deleteFood(@PathVariable String id) {
 
