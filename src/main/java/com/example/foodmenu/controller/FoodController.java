@@ -3,6 +3,7 @@ package com.example.foodmenu.controller;
 import com.example.foodmenu.entity.Food;
 import com.example.foodmenu.service.FoodService;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -16,7 +17,7 @@ public class FoodController {
     }
 
     @PostMapping("/add-food")
-    public Food addFood(@RequestBody Food food) {
+    public Food addFood(@Valid @RequestBody Food food) {
 
         System.out.println("Food Name: " + food.getName());
         System.out.println("Food Price: " + food.getPrice());
@@ -30,7 +31,7 @@ public class FoodController {
 
     @PutMapping("/update-food/{id}")
     public Food updateFood(@PathVariable String id,
-                           @RequestBody Food food) {
+                          @Valid @RequestBody Food food) {
         return foodService.updateFood(id, food);
     }
     @DeleteMapping("/delete-food/{id}")
