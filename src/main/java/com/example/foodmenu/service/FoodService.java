@@ -5,53 +5,41 @@ import com.example.foodmenu.repository.FoodRepository;
 import org.springframework.stereotype.Service;
 import com.example.foodmenu.dto.FoodRequestDTO;
 import com.example.foodmenu.dto.FoodResponseDTO;
+import org.modelmapper.ModelMapper;
 
 import java.util.List;
 
 @Service
 public class FoodService {
 
-    private final FoodRepository foodRepository;
 
-    public FoodService(FoodRepository foodRepository) {
+    private final FoodRepository foodRepository;
+    private final ModelMapper modelMapper;
+
+    public FoodService(FoodRepository foodRepository, ModelMapper modelMapper) {
         this.foodRepository = foodRepository;
+        this.modelMapper = modelMapper;
     }
 
 
     public FoodResponseDTO addFood(FoodRequestDTO foodRequestDTO) {
 
-        Food food = new Food();
-
-        food.setName(foodRequestDTO.getName());
-        food.setPrice(foodRequestDTO.getPrice());
+        Food food = modelMapper.map(foodRequestDTO, Food.class);
 
         Food savedFood = foodRepository.save(food);
 
-        FoodResponseDTO responseDTO = new FoodResponseDTO();
-
-        responseDTO.setId(savedFood.getId());
-        responseDTO.setName(savedFood.getName());
-        responseDTO.setPrice(savedFood.getPrice());
-
-        return responseDTO;
+        return modelMapper.map(savedFood, FoodResponseDTO.class);
     }
+
 
 
     public List<FoodResponseDTO> getAllFood() {
 
         List<Food> foods = foodRepository.findAll();
 
-        return foods.stream().map(food -> {
-
-            FoodResponseDTO responseDTO = new FoodResponseDTO();
-
-            responseDTO.setId(food.getId());
-            responseDTO.setName(food.getName());
-            responseDTO.setPrice(food.getPrice());
-
-            return responseDTO;
-
-        }).toList();
+        return foods.stream()
+                .map(food -> modelMapper.map(food, FoodResponseDTO.class))
+                .toList();
     }
 
 
@@ -60,18 +48,11 @@ public class FoodService {
         Food existingFood = foodRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Food not found"));
 
-        existingFood.setName(updatedFoodDTO.getName());
-        existingFood.setPrice(updatedFoodDTO.getPrice());
+        modelMapper.map(updatedFoodDTO, existingFood);
 
         Food updatedFood = foodRepository.save(existingFood);
 
-        FoodResponseDTO responseDTO = new FoodResponseDTO();
-
-        responseDTO.setId(updatedFood.getId());
-        responseDTO.setName(updatedFood.getName());
-        responseDTO.setPrice(updatedFood.getPrice());
-
-        return responseDTO;
+        return modelMapper.map(updatedFood, FoodResponseDTO.class);
     }
 
     public void deleteFood(String id) {
