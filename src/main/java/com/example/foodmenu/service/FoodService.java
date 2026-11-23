@@ -7,6 +7,8 @@ import com.example.foodmenu.dto.FoodRequestDTO;
 import com.example.foodmenu.dto.FoodResponseDTO;
 import org.modelmapper.ModelMapper;
 import com.example.foodmenu.exception.ResourceNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -41,6 +43,14 @@ public class FoodService {
         return foods.stream()
                 .map(food -> modelMapper.map(food, FoodResponseDTO.class))
                 .toList();
+    }
+    public Page<FoodResponseDTO> getAllFood(Pageable pageable) {
+
+        Page<Food> foods = foodRepository.findAll(pageable);
+
+        return foods.map(food ->
+                modelMapper.map(food, FoodResponseDTO.class)
+        );
     }
 
 

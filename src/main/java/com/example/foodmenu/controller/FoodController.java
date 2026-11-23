@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 
 @RestController
@@ -61,6 +63,14 @@ public class FoodController {
         return new ResponseEntity<>(
                 foodService.getFoodByCategory(category),
                 HttpStatus.OK
+        );
+    }
+    @GetMapping("/page")
+    public ResponseEntity<Page<FoodResponseDTO>> getAllFoodPaginated(
+            Pageable pageable) {
+
+        return ResponseEntity.ok(
+                foodService.getAllFood(pageable)
         );
     }
 }
