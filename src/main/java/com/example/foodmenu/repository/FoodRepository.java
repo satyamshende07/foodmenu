@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface FoodRepository extends MongoRepository<Food, String> {
     List<Food> findByNameContainingIgnoreCase(String name);
+    List<Food> findByCategoryIgnoreCase(String category);
 }

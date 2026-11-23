@@ -9,9 +9,8 @@ import com.example.foodmenu.dto.FoodResponseDTO;
 import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 
-
-import java.util.List;
 
 @RestController
 public class FoodController {
@@ -54,5 +53,14 @@ public class FoodController {
             @RequestParam String name) {
 
         return ResponseEntity.ok(foodService.searchFood(name));
+    }
+    @GetMapping("/category")
+    public ResponseEntity<List<FoodResponseDTO>> getFoodByCategory(
+            @RequestParam String category) {
+
+        return new ResponseEntity<>(
+                foodService.getFoodByCategory(category),
+                HttpStatus.OK
+        );
     }
 }

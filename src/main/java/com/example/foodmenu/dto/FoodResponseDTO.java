@@ -13,4 +13,6 @@ public class FoodResponseDTO {
     private String name;
 
     private double price;
+
+    private String category;
 }

@@ -67,4 +67,11 @@ public class FoodService {
                 .map(food -> modelMapper.map(food, FoodResponseDTO.class))
                 .toList();
     }
+    public List<FoodResponseDTO> getFoodByCategory(String category) {
+        List<Food> foods = foodRepository.findByCategoryIgnoreCase(category);
+
+        return foods.stream()
+                .map(food -> modelMapper.map(food, FoodResponseDTO.class))
+                .toList();
+    }
 }

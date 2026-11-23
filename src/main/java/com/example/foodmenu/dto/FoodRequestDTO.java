@@ -15,4 +15,6 @@ public class FoodRequestDTO {
 
     @Positive(message = "Price must be greater than zero")
     private double price;
+
+    private String category;
 }
