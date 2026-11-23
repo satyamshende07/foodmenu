@@ -32,12 +32,16 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .exceptionHandling(exception -> exception
-                        .authenticationEntryPoint((request, response, authException) ->
-                                response.sendError(
-                                        HttpServletResponse.SC_UNAUTHORIZED,
-                                        "Unauthorized"
-                                )
-                        )
+
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                            response.getWriter().write("Unauthorized");
+                        })
+
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                            response.getWriter().write("Forbidden");
+                        })
                 )
 
                 .authorizeHttpRequests(auth -> auth
@@ -51,6 +55,11 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/add-food").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/update-food/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/delete-food/**").hasRole("ADMIN")
+                        .requestMatchers(
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/v3/api-docs/**"
+                        ).permitAll()
 
                         .anyRequest().authenticated()
                 )

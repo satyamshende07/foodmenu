@@ -12,9 +12,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 
 @RestController
+@SecurityRequirement(name = "bearerAuth")
 public class FoodController {
 
     private final FoodService foodService;
