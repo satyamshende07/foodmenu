@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.example.foodmenu.dto.FoodRequestDTO;
 import com.example.foodmenu.dto.FoodResponseDTO;
 import org.modelmapper.ModelMapper;
+import com.example.foodmenu.exception.ResourceNotFoundException;
 
 import java.util.List;
 
@@ -46,7 +47,7 @@ public class FoodService {
     public FoodResponseDTO updateFood(String id, FoodRequestDTO updatedFoodDTO) {
 
         Food existingFood = foodRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Food not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Food not found with id: " + id));
 
         modelMapper.map(updatedFoodDTO, existingFood);
 
