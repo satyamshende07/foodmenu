@@ -59,4 +59,12 @@ public class FoodService {
     public void deleteFood(String id) {
         foodRepository.deleteById(id);
     }
+    public List<FoodResponseDTO> searchFood(String name) {
+        List<Food> foods = foodRepository
+                .findByNameContainingIgnoreCase(name);
+
+        return foods.stream()
+                .map(food -> modelMapper.map(food, FoodResponseDTO.class))
+                .toList();
+    }
 }

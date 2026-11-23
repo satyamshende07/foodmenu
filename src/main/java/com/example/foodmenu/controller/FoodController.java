@@ -6,6 +6,10 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 import com.example.foodmenu.dto.FoodRequestDTO;
 import com.example.foodmenu.dto.FoodResponseDTO;
+import org.springframework.web.bind.annotation.RequestParam;
+import java.util.List;
+import org.springframework.http.ResponseEntity;
+
 
 import java.util.List;
 
@@ -29,6 +33,7 @@ public class FoodController {
         return foodService.getAllFood();
     }
 
+
     @PutMapping("/update-food/{id}")
     public FoodResponseDTO updateFood(
             @PathVariable String id,
@@ -43,5 +48,11 @@ public class FoodController {
         foodService.deleteFood(id);
 
         return "Food deleted successfully";
+    }
+    @GetMapping("/search")
+    public ResponseEntity<List<FoodResponseDTO>> searchFood(
+            @RequestParam String name) {
+
+        return ResponseEntity.ok(foodService.searchFood(name));
     }
 }
