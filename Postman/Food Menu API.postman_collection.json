@@ -1,0 +1,569 @@
+{
+  "info": {
+    "_postman_id": "63dd8764-b00c-460a-9c67-381a3862409d",
+    "name": "Food Menu API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "59104399",
+    "_collection_link": "https://go.postman.co/collection/59104399-63dd8764-b00c-460a-9c67-381a3862409d?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Login User",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\": \"foodmenu-admin\",\r\n    \"\": \"YOUR_ADMIN_PASSWORD\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/auth/login",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"userName\": \"newuser\",\r\n    \"password\": \"YOUR_USER_PASSWORD\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/auth/register",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Food Mangement",
+      "item": [
+        {
+          "name": "Add Food",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Food added successfully\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.success).to.eql(true);\r\n});\r\n\r\npm.test(\"Added food contains required fields\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.data).to.have.property(\"id\");\r\n    pm.expect(response.data).to.have.property(\"name\");\r\n    pm.expect(response.data).to.have.property(\"price\");\r\n    pm.expect(response.data).to.have.property(\"category\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{json_web_token_0l9m}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"Paneer Tikka\",\r\n    \"price\": 280,\r\n    \"category\": \"Indian\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/add-food",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "add-food"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Food",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"API response is successful\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.success).to.eql(true);\r\n});\r\n\r\npm.test(\"Response contains food data\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.data).to.not.be.null;\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{json_web_token_0nj3}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/all-food",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "all-food"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Food",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Food updated successfully\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.success).to.eql(true);\r\n});\r\n\r\npm.test(\"Updated food contains required fields\", function () {\r\n    const response = pm.response.json();\r\n\r\n    pm.expect(response.data).to.have.property(\"id\");\r\n    pm.expect(response.data).to.have.property(\"name\");\r\n    pm.expect(response.data).to.have.property(\"price\");\r\n    pm.expect(response.data).to.have.property(\"category\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{json_web_token_0l9m}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"Paneer Tikka Masala\",\r\n    \"price\": 320,\r\n    \"category\": \"Indian\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/update-food/FOOD_ID",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "update-food",
+                "FOOD_ID"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Food",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Food deleted successfully\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.success).to.eql(true);\r\n});\r\n\r\npm.test(\"Delete response contains success message\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.message).to.include(\"deleted\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{json_web_token_0k35}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/delete-food/FOOD_ID",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "delete-food",
+                "FOOD_ID"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search Food",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Search response is successful\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.success).to.eql(true);\r\n});\r\n\r\npm.test(\"Search response contains an array\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.data).to.be.an(\"array\");\r\n});`    `"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{json_web_token_0nj3}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/search?name=pizza",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "name",
+                  "value": "pizza"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Food By Category",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Category response is successful\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.success).to.eql(true);\r\n});\r\n\r\npm.test(\"Category response contains an array\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.data).to.be.an(\"array\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{json_web_token_0nj3}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/category?category=Italian",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "category"
+              ],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "Italian"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Food - Pagination",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Pagination response is successful\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.success).to.eql(true);\r\n});\r\n\r\npm.test(\"Pagination contains required fields\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.data).to.have.property(\"content\");\r\n    pm.expect(response.data).to.have.property(\"totalPages\");\r\n    pm.expect(response.data).to.have.property(\"totalElements\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{json_web_token_0nj3}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/page?page=0&size=5",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "page"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "5"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Sort Food - By Name",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Sorting response is successful\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.success).to.eql(true);\r\n});\r\n\r\npm.test(\"Food items are sorted alphabetically\", function () {\r\n    const response = pm.response.json();\r\n    const names = response.data.content.map(food => food.name);\r\n    const sortedNames = [...names].sort((a, b) => a.localeCompare(b));\r\n\r\n    pm.expect(names).to.eql(sortedNames);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{json_web_token_0nj3}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/page?page=0&size=5&sort=name,asc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "page"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "5"
+                },
+                {
+                  "key": "sort",
+                  "value": "name,asc"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Sort Food - By Price (ASC)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Sorting response is successful\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.success).to.eql(true);\r\n});\r\n\r\npm.test(\"Food items are sorted by price ascending\", function () {\r\n    const response = pm.response.json();\r\n    const prices = response.data.content.map(food => food.price);\r\n    const sortedPrices = [...prices].sort((a, b) => a - b);\r\n\r\n    pm.expect(prices).to.eql(sortedPrices);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{json_web_token_0nj3}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/page?page=0&size=5&sort=price,asc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "page"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "5"
+                },
+                {
+                  "key": "sort",
+                  "value": "price,asc"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Sort Food - By Price (Desc)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Sorting response is successful\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.success).to.eql(true);\r\n});\r\n\r\npm.test(\"Food items are sorted by price descending\", function () {\r\n    const response = pm.response.json();\r\n    const prices = response.data.content.map(food => food.price);\r\n    const sortedPrices = [...prices].sort((a, b) => b - a);\r\n\r\n    pm.expect(prices).to.eql(sortedPrices);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{json_web_token_0nj3}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/page?page=0&size=5&sort=price,desc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "page"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "5"
+                },
+                {
+                  "key": "sort",
+                  "value": "price,desc"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "json_web_token_0l9m",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_0k35",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_0cbj",
+      "secret": true
+    },
+    {
+      "key": "baseUrl",
+      "value": ""
+    },
+    {
+      "key": "json_web_token_14aq",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_0nj3",
+      "secret": true
+    }
+  ]
+}
