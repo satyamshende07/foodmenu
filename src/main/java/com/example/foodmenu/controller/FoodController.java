@@ -1,19 +1,20 @@
+
 package com.example.foodmenu.controller;
 
-import com.example.foodmenu.entity.Food;
-import com.example.foodmenu.service.FoodService;
-import org.springframework.web.bind.annotation.*;
-import jakarta.validation.Valid;
+import com.example.foodmenu.dto.ApiResponse;
 import com.example.foodmenu.dto.FoodRequestDTO;
 import com.example.foodmenu.dto.FoodResponseDTO;
-import org.springframework.web.bind.annotation.RequestParam;
-import java.util.List;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpStatus;
+import com.example.foodmenu.service.FoodService;
+
+import jakarta.validation.Valid;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.*;
+
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
+import java.util.List;
 
 @RestController
 @SecurityRequirement(name = "bearerAuth")
@@ -26,52 +27,79 @@ public class FoodController {
     }
 
     @PostMapping("/add-food")
-    public FoodResponseDTO addFood(@Valid @RequestBody FoodRequestDTO foodRequestDTO) {
+    public ApiResponse<FoodResponseDTO> addFood(
+            @Valid @RequestBody FoodRequestDTO foodRequestDTO) {
 
-        return foodService.addFood(foodRequestDTO);
+        return new ApiResponse<>(
+                true,
+                "Food added successfully",
+                foodService.addFood(foodRequestDTO)
+        );
     }
 
     @GetMapping("/all-food")
-    public List<FoodResponseDTO> getAllFood() {
-        return foodService.getAllFood();
+    public ApiResponse<List<FoodResponseDTO>> getAllFood() {
+
+        return new ApiResponse<>(
+                true,
+                "Food fetched successfully",
+                foodService.getAllFood()
+        );
     }
 
-
     @PutMapping("/update-food/{id}")
-    public FoodResponseDTO updateFood(
+    public ApiResponse<FoodResponseDTO> updateFood(
             @PathVariable String id,
             @Valid @RequestBody FoodRequestDTO foodRequestDTO) {
 
-        return foodService.updateFood(id, foodRequestDTO);
+        return new ApiResponse<>(
+                true,
+                "Food updated successfully",
+                foodService.updateFood(id, foodRequestDTO)
+        );
     }
 
     @DeleteMapping("/delete-food/{id}")
-    public String deleteFood(@PathVariable String id) {
+    public ApiResponse<Void> deleteFood(@PathVariable String id) {
 
         foodService.deleteFood(id);
 
-        return "Food deleted successfully";
-    }
-    @GetMapping("/search")
-    public ResponseEntity<List<FoodResponseDTO>> searchFood(
-            @RequestParam String name) {
-
-        return ResponseEntity.ok(foodService.searchFood(name));
-    }
-    @GetMapping("/category")
-    public ResponseEntity<List<FoodResponseDTO>> getFoodByCategory(
-            @RequestParam String category) {
-
-        return new ResponseEntity<>(
-                foodService.getFoodByCategory(category),
-                HttpStatus.OK
+        return new ApiResponse<>(
+                true,
+                "Food deleted successfully",
+                null
         );
     }
+
+    @GetMapping("/search")
+    public ApiResponse<List<FoodResponseDTO>> searchFood(
+            @RequestParam String name) {
+
+        return new ApiResponse<>(
+                true,
+                "Food search completed successfully",
+                foodService.searchFood(name)
+        );
+    }
+
+    @GetMapping("/category")
+    public ApiResponse<List<FoodResponseDTO>> getFoodByCategory(
+            @RequestParam String category) {
+
+        return new ApiResponse<>(
+                true,
+                "Food fetched by category successfully",
+                foodService.getFoodByCategory(category)
+        );
+    }
+
     @GetMapping("/page")
-    public ResponseEntity<Page<FoodResponseDTO>> getAllFoodPaginated(
+    public ApiResponse<Page<FoodResponseDTO>> getAllFoodPaginated(
             Pageable pageable) {
 
-        return ResponseEntity.ok(
+        return new ApiResponse<>(
+                true,
+                "Paginated food fetched successfully",
                 foodService.getAllFood(pageable)
         );
     }

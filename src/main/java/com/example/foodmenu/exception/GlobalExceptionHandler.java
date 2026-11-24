@@ -1,7 +1,7 @@
 
 package com.example.foodmenu.exception;
 
-import jakarta.servlet.http.HttpServletRequest;
+import com.example.foodmenu.dto.ApiResponse;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,26 +18,22 @@ public class GlobalExceptionHandler {
 
     // Handle resource not found exception
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ApiError> handleResourceNotFound(
-            ResourceNotFoundException ex,
-            HttpServletRequest request) {
+    public ResponseEntity<ApiResponse<Void>> handleResourceNotFound(
+            ResourceNotFoundException ex) {
 
-        ApiError error = new ApiError(
-                LocalDateTime.now(),
-                HttpStatus.NOT_FOUND.value(),
-                "Not Found",
+        ApiResponse<Void> response = new ApiResponse<>(
+                false,
                 ex.getMessage(),
-                request.getRequestURI()
+                null
         );
 
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
     // Handle validation errors
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiError> handleValidationErrors(
-            MethodArgumentNotValidException ex,
-            HttpServletRequest request) {
+    public ResponseEntity<ApiResponse<Map<String, String>>> handleValidationErrors(
+            MethodArgumentNotValidException ex) {
 
         Map<String, String> errors = new HashMap<>();
 
@@ -46,51 +41,45 @@ public class GlobalExceptionHandler {
                 errors.put(error.getField(), error.getDefaultMessage())
         );
 
-        ApiError apiError = new ApiError(
-                LocalDateTime.now(),
-                HttpStatus.BAD_REQUEST.value(),
-                "Bad Request",
-                errors.toString(),
-                request.getRequestURI()
+        ApiResponse<Map<String, String>> response = new ApiResponse<>(
+                false,
+                "Validation failed",
+                errors
         );
 
-        return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
+
+    // Handle response status exceptions
     @ExceptionHandler(ResponseStatusException.class)
-    public ResponseEntity<ApiError> handleResponseStatusException(
-            ResponseStatusException ex,
-            HttpServletRequest request) {
+    public ResponseEntity<ApiResponse<Void>> handleResponseStatusException(
+            ResponseStatusException ex) {
 
         HttpStatus status = HttpStatus.valueOf(ex.getStatusCode().value());
 
-        ApiError error = new ApiError(
-                LocalDateTime.now(),
-                status.value(),
-                status.getReasonPhrase(),
+        ApiResponse<Void> response = new ApiResponse<>(
+                false,
                 ex.getReason(),
-                request.getRequestURI()
+                null
         );
 
-        return new ResponseEntity<>(error, status);
+        return new ResponseEntity<>(response, status);
     }
 
+    // Handle unexpected exceptions
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiError> handleGeneralException(
-            Exception ex,
-            HttpServletRequest request) {
+    public ResponseEntity<ApiResponse<Void>> handleGeneralException(
+            Exception ex) {
 
-        ApiError error = new ApiError(
-                LocalDateTime.now(),
-                HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                "Internal Server Error",
+        ApiResponse<Void> response = new ApiResponse<>(
+                false,
                 "An unexpected error occurred",
-                request.getRequestURI()
+                null
         );
 
         return new ResponseEntity<>(
-                error,
+                response,
                 HttpStatus.INTERNAL_SERVER_ERROR
         );
     }
-
 }
