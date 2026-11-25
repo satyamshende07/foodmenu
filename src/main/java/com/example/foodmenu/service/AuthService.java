@@ -47,7 +47,6 @@ public class AuthService {
         userRepository.save(user);
     }
 
-    // User Login with JWT
     public LoginResponseDTO login(LoginRequestDTO request) {
 
         User user = userRepository.findByUsername(request.getUsername())

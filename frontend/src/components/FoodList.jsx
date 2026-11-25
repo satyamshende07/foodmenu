@@ -1,0 +1,128 @@
+
+import {useCallback, useEffect, useState } from "react";
+import { getAllFood, searchFood } from "../services/foodService";
+
+function FoodList({isLoggedIn}) {
+  const [foods, setFoods] = useState([]);
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleLoadFoods = useCallback(async () => {
+    try {
+      setLoading(true);
+      setMessage("");
+
+      const data = await getAllFood();
+
+      console.log("Food API response:", data);
+
+      setFoods(Array.isArray(data) ? data : data.data || []);
+    } catch (error) {
+      console.error("Food loading error:", error);
+      setMessage("Unable to load food items.");
+    } finally {
+      setLoading(false);
+    }
+  },[]);
+
+
+const handleSearch = async () => {
+  try {
+    setLoading(true);
+    setMessage("");
+
+    if (!searchTerm.trim()) {
+      await handleLoadFoods();
+      return;
+    }
+
+    const data = await searchFood(searchTerm);
+
+    console.log("Search API response:", data);
+
+    setFoods(Array.isArray(data) ? data : data.data || []);
+
+  } catch (error) {
+    console.error("Search error:", error);
+    setMessage("Unable to search food items.");
+  } finally {
+    setLoading(false);
+  }
+};
+
+
+  useEffect(() => {
+  if (isLoggedIn) {
+    handleLoadFoods();
+  } else {
+    setFoods([]);
+    setMessage("");
+  }
+}, [isLoggedIn, handleLoadFoods]);
+
+  return (
+    <div>
+      {!isLoggedIn && (
+  <p>Please log in to explore our delicious menu.</p>
+)}
+
+{isLoggedIn && message && <p>{message}</p>}
+
+      {loading && <p>Loading food items...</p>}
+
+
+<div className="food-search">
+  <input
+    type="text"
+    placeholder="Search food... (e.g. Pizza)"
+    value={searchTerm}
+    onChange={(event) => setSearchTerm(event.target.value)}
+  />
+
+  <button onClick={handleSearch}>
+    Search
+  </button>
+
+  <button onClick={handleLoadFoods}>
+    Show All
+  </button>
+</div>
+
+
+      {!loading && foods.length === 0 && !message && (
+        <p>No food items available.</p>
+      )}
+
+      {!loading && foods.length > 0 && (
+        <div className="food-grid">
+         {foods.map((food) => (
+  <div className="food-card" key={food.id}>
+    <div className="food-card-image">
+      <img
+        src={
+          {
+            "Paneer Tikka Masala": "public/images/paneer-tikka.png",
+            "Butter Chicken": "public/images/butter-chicken.png",
+            "Paneer Biryani": "public/images/paneer-biryani.png",
+            "White Sauce Pasta": "public/images/white-sauce-pasta.png",
+          }[food.name] || "/images/default-food.jpg"
+        }
+        alt={food.name}
+      />
+    </div>
+
+    <div className="food-card-content">
+      <h3>{food.name}</h3>
+      <p>{food.category}</p>
+      <h4>₹{food.price}</h4>
+    </div>
+  </div>
+))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default FoodList;
