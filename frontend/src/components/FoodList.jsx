@@ -2,11 +2,28 @@
 import {useCallback, useEffect, useState } from "react";
 import { getAllFood, searchFood } from "../services/foodService";
 
-function FoodList({isLoggedIn}) {
+function FoodList({ isLoggedIn, cart, setCart }) {
   const [foods, setFoods] = useState([]);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const addToCart = (food) => {
+  setCart((previousCart) => {
+    const existingItem = previousCart.find(
+      (item) => item.id === food.id
+    );
+
+    if (existingItem) {
+      return previousCart.map((item) =>
+        item.id === food.id
+          ? { ...item, quantity: item.quantity + 1 }
+          : item
+      );
+    }
+
+    return [...previousCart, { ...food, quantity: 1 }];
+  });
+};
 
   const handleLoadFoods = useCallback(async () => {
     try {
@@ -116,6 +133,12 @@ const handleSearch = async () => {
       <h3>{food.name}</h3>
       <p>{food.category}</p>
       <h4>₹{food.price}</h4>
+     <button
+  className="add-cart-button"
+  onClick={() => addToCart(food)}
+>
+  Add to Cart
+</button>
     </div>
   </div>
 ))}
