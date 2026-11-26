@@ -4,7 +4,9 @@ import FoodList from "./components/FoodList";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Cart from "./components/Cart";
+import Checkout from "./components/Checkout";
 import heroFood from "./assets/hero-food.png";
+
 import { useState } from "react";
 import { Routes, Route, useNavigate, Link } from "react-router-dom";
 
@@ -23,39 +25,43 @@ function App() {
     setIsLoggedIn(false);
     setCart([]);
   };
-  const increaseQuantity = (foodId) => {
-  setCart((previousCart) =>
-    previousCart.map((item) =>
-      item.id === foodId
-        ? { ...item, quantity: item.quantity + 1 }
-        : item
-    )
-  );
-};
 
-const decreaseQuantity = (foodId) => {
-  setCart((previousCart) =>
-    previousCart
-      .map((item) =>
+  const increaseQuantity = (foodId) => {
+    setCart((previousCart) =>
+      previousCart.map((item) =>
         item.id === foodId
-          ? { ...item, quantity: item.quantity - 1 }
+          ? { ...item, quantity: item.quantity + 1 }
           : item
       )
-      .filter((item) => item.quantity > 0)
-  );
-};
-const removeFromCart = (foodId) => {
-  setCart((previousCart) =>
-    previousCart.filter((item) => item.id !== foodId)
-  );
-};
+    );
+  };
+
+  const decreaseQuantity = (foodId) => {
+    setCart((previousCart) =>
+      previousCart
+        .map((item) =>
+          item.id === foodId
+            ? { ...item, quantity: item.quantity - 1 }
+            : item
+        )
+        .filter((item) => item.quantity > 0)
+    );
+  };
+
+  const removeFromCart = (foodId) => {
+    setCart((previousCart) =>
+      previousCart.filter((item) => item.id !== foodId)
+    );
+  };
 
   return (
     <div className="app">
 
       {/* Navigation */}
       <header className="navbar">
-        <h1 className="logo">Crave <span>&</span> Co.</h1>
+        <h1 className="logo">
+          Crave <span>&</span> Co.
+        </h1>
 
         <nav>
           <Link to="/">Home</Link>
@@ -146,7 +152,9 @@ const removeFromCart = (foodId) => {
                     setCart={setCart}
                   />
                 ) : (
-                  <p>Please log in to explore our delicious menu.</p>
+                  <p>
+                    Please log in to explore our delicious menu.
+                  </p>
                 )}
               </section>
 
@@ -172,11 +180,15 @@ const removeFromCart = (foodId) => {
 
                     {showRegister ? (
                       <Register
-                        onRegisterSuccess={() => setShowRegister(false)}
+                        onRegisterSuccess={() =>
+                          setShowRegister(false)
+                        }
                       />
                     ) : (
                       <Login
-                        onLoginSuccess={() => setIsLoggedIn(true)}
+                        onLoginSuccess={() =>
+                          setIsLoggedIn(true)
+                        }
                       />
                     )}
                   </div>
@@ -193,20 +205,33 @@ const removeFromCart = (foodId) => {
           }
         />
 
-       {/* Cart Page */}
-<Route
-  path="/cart"
-  element={
-    <Cart
-      cart={cart}
-      showCart={true}
-      onClose={() => navigate("/")}
-      increaseQuantity={increaseQuantity}
-      decreaseQuantity={decreaseQuantity}
-      removeFromCart={removeFromCart}
-    />
-  }
-/>
+        {/* Cart Page */}
+        <Route
+          path="/cart"
+          element={
+            <Cart
+              cart={cart}
+              showCart={true}
+              onClose={() => navigate("/")}
+              increaseQuantity={increaseQuantity}
+              decreaseQuantity={decreaseQuantity}
+              removeFromCart={removeFromCart}
+              onCheckout={() => navigate("/checkout")}
+            />
+          }
+        />
+
+        {/* Checkout Page */}
+        <Route
+          path="/checkout"
+          element={
+            <Checkout
+              cart={cart}
+              onBack={() => navigate("/cart")}
+            />
+          }
+        />
+
       </Routes>
     </div>
   );

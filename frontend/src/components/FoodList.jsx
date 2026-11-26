@@ -1,5 +1,5 @@
 
-import {useCallback, useEffect, useState } from "react";
+import {useCallback, useEffect, useRef, useState } from "react";
 import { getAllFood, searchFood } from "../services/foodService";
 
 function FoodList({ isLoggedIn, cart, setCart }) {
@@ -7,7 +7,31 @@ function FoodList({ isLoggedIn, cart, setCart }) {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const addToCart = (food) => {
+  const [toastMessage, setToastMessage] = useState("");
+  const toastTimer = useRef(null);
+
+const showToast = (foodName) => {
+  setToastMessage(`${foodName} added to cart!`);
+
+  if (toastTimer.current) {
+    clearTimeout(toastTimer.current);
+  }
+
+  toastTimer.current = setTimeout(() => {
+    setToastMessage("");
+    toastTimer.current = null;
+  }, 2000);
+};
+
+useEffect(() => {
+  return () => {
+    if (toastTimer.current) {
+      clearTimeout(toastTimer.current);
+    }
+  };
+}, []);
+ const addToCart = (food) => {
+
   setCart((previousCart) => {
     const existingItem = previousCart.find(
       (item) => item.id === food.id
@@ -23,6 +47,8 @@ function FoodList({ isLoggedIn, cart, setCart }) {
 
     return [...previousCart, { ...food, quantity: 1 }];
   });
+
+  showToast(food.name);
 };
 
   const handleLoadFoods = useCallback(async () => {
@@ -80,6 +106,12 @@ const handleSearch = async () => {
 
   return (
     <div>
+      {toastMessage && (
+  <div className="toast-message">
+    <span className="toast-check">✓</span>
+    {toastMessage}
+  </div>
+)}
       {!isLoggedIn && (
   <p>Please log in to explore our delicious menu.</p>
 )}

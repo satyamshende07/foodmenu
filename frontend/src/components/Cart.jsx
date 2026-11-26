@@ -6,6 +6,7 @@ function Cart({
   increaseQuantity,
   decreaseQuantity,
   removeFromCart,
+    onCheckout,
 })  {
   if (!showCart) {
     return null;
@@ -20,7 +21,7 @@ function Cart({
     <section className="cart-page">
       <div className="cart-page-header">
         <h2>Your Shopping Cart</h2>
-        <button onClick={onClose}>Continue Shopping</button>
+        <button onClick={onClose}>Back</button>
       </div>
 
       {cart.length === 0 ? (
@@ -61,8 +62,15 @@ function Cart({
           </div>
 
           <div className="cart-total">
-            <h3>Total: ₹{totalPrice}</h3>
-          </div>
+  <h3>Total: ₹{totalPrice}</h3>
+
+  <button
+  className="checkout-button"
+  onClick={onCheckout}
+>
+  Proceed to Checkout
+</button>
+</div>
         </>
       )}
     </section>
