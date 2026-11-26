@@ -20,7 +20,7 @@ function Cart({
   return (
     <section className="cart-page">
       <div className="cart-page-header">
-        <h2>Your Shopping Cart</h2>
+        <h2>Your Food Cart</h2>
         <button onClick={onClose}>Back</button>
       </div>
 

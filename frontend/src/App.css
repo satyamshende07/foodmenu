@@ -900,3 +900,150 @@ footer p {
     transform: translateX(0);
   }
 }
+
+
+/* Delivery Details Form */
+.delivery-form {
+  margin-top: 30px;
+  padding: 30px;
+  background: #202020;
+  border: 1px solid #333;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.delivery-form h3 {
+  color: #ffffff;
+  font-size: 23px;
+  margin-bottom: 15px;
+}
+
+.delivery-form label {
+  color: #dddddd;
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+.delivery-form input,
+.delivery-form textarea,
+.delivery-form select {
+  width: 100%;
+  padding: 13px 15px;
+  background: #171717;
+  color: #ffffff;
+  border: 1px solid #444;
+  border-radius: 8px;
+  font-size: 15px;
+  outline: none;
+}
+
+.delivery-form input:focus,
+.delivery-form textarea:focus,
+.delivery-form select:focus {
+  border-color: #f31632;
+}
+
+.delivery-form textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.delivery-form button {
+  padding: 14px 20px;
+  margin-top: 15px;
+  background: #f31632;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.delivery-form button:hover {
+  background: #c90d27;
+  transform: translateY(-2px);
+}
+
+.delivery-form button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.delivery-form button[type="button"] {
+  background: transparent;
+  border: 1px solid #777;
+}
+
+.delivery-form button[type="button"]:hover {
+  background: #333;
+}
+
+
+/* Order Confirmation */
+.order-confirmation {
+  max-width: 650px;
+  margin: 50px auto;
+  padding: 40px;
+  text-align: center;
+  background: #202020;
+  border: 1px solid #444;
+  border-radius: 16px;
+}
+
+.success-icon {
+  width: 75px;
+  height: 75px;
+  margin: 0 auto 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #173d2b;
+  color: #4ade80;
+  border-radius: 50%;
+  font-size: 42px;
+  font-weight: bold;
+}
+
+.order-confirmation h2 {
+  color: #4ade80;
+  margin-bottom: 12px;
+}
+
+.order-confirmation > p {
+  color: #ccc;
+  margin-bottom: 25px;
+}
+
+.confirmation-details {
+  padding: 20px;
+  margin-bottom: 25px;
+  background: #292929;
+  border-radius: 10px;
+  text-align: left;
+}
+
+.confirmation-details p {
+  margin: 12px 0;
+  color: white;
+  overflow-wrap: anywhere;
+}
+
+.order-confirmation button {
+  padding: 14px 28px;
+  background: #9b1c31;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.order-confirmation button:hover {
+  background: #bd2941;
+}

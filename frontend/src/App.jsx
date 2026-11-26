@@ -228,6 +228,7 @@ function App() {
             <Checkout
               cart={cart}
               onBack={() => navigate("/cart")}
+              onOrderSuccess={() => setCart([])}
             />
           }
         />
