@@ -1,14 +1,15 @@
 
 import "./App.css";
-import FoodList from "./components/FoodList";
-import Login from "./components/Login";
-import Register from "./components/Register";
 import Cart from "./components/Cart";
 import Checkout from "./components/Checkout";
-import heroFood from "./assets/hero-food.png";
+import Home from "./pages/Home";
+import Menu from "./pages/Menu";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
 
 import { useState } from "react";
 import { Routes, Route, useNavigate, Link } from "react-router-dom";
+
 
 function App() {
   const navigate = useNavigate();
@@ -56,7 +57,6 @@ function App() {
 
   return (
     <div className="app">
-
       {/* Navigation */}
       <header className="navbar">
         <h1 className="logo">
@@ -65,9 +65,9 @@ function App() {
 
         <nav>
           <Link to="/">Home</Link>
-          <a href="/#menu">Menu</a>
-          <a href="/#about">About Us</a>
-          <a href="/#contact">Contact</a>
+          <Link to="/menu">Menu</Link>
+          <Link to="/about">About Us</Link>
+          <Link to="/contact">Contact</Link>
         </nav>
 
         <div className="nav-actions">
@@ -96,115 +96,42 @@ function App() {
 
       {/* Page Routes */}
       <Routes>
-
         {/* Home Page */}
         <Route
           path="/"
           element={
-            <>
-              <section className="hero" id="home">
-                <div className="hero-content">
-                  <p className="hero-tagline">
-                    WELCOME TO Crave & Co.
-                  </p>
-
-                  <h2>
-                    It's Not Just
-                    <br />
-                    Food, It's An
-                    <br />
-                    Experience.
-                  </h2>
-
-                  <p className="hero-description">
-                    Discover delicious flavours and enjoy
-                    every bite with us.
-                  </p>
-
-                  <div className="hero-buttons">
-                    <a href="#menu" className="primary-button">
-                      View Menu
-                    </a>
-
-                    <a href="#contact" className="secondary-button">
-                      Book A Table
-                    </a>
-                  </div>
-                </div>
-
-                <div className="hero-image">
-                  <img
-                    src={heroFood}
-                    alt="Crave and Co signature food bowl"
-                  />
-                </div>
-              </section>
-
-              {/* Food Menu */}
-              <section className="menu-section" id="menu">
-                <p className="section-tag">OUR SPECIALITIES</p>
-                <h2>Popular Dishes</h2>
-
-                {isLoggedIn ? (
-                  <FoodList
-                    isLoggedIn={isLoggedIn}
-                    cart={cart}
-                    setCart={setCart}
-                  />
-                ) : (
-                  <p>
-                    Please log in to explore our delicious menu.
-                  </p>
-                )}
-              </section>
-
-              {/* Login and Registration */}
-              {!isLoggedIn && (
-                <section className="login-section" id="login">
-                  <div className="auth-container">
-                    <div className="auth-tabs">
-                      <button
-                        className={!showRegister ? "active" : ""}
-                        onClick={() => setShowRegister(false)}
-                      >
-                        Login
-                      </button>
-
-                      <button
-                        className={showRegister ? "active" : ""}
-                        onClick={() => setShowRegister(true)}
-                      >
-                        Register
-                      </button>
-                    </div>
-
-                    {showRegister ? (
-                      <Register
-                        onRegisterSuccess={() =>
-                          setShowRegister(false)
-                        }
-                      />
-                    ) : (
-                      <Login
-                        onLoginSuccess={() =>
-                          setIsLoggedIn(true)
-                        }
-                      />
-                    )}
-                  </div>
-                </section>
-              )}
-
-              {/* Footer */}
-              <footer id="contact">
-                <h2>Crave & Co.</h2>
-                <p>Good Food. Great Experience.</p>
-                <p>© 2026 Crave & Co. All rights reserved.</p>
-              </footer>
-            </>
+            <Home
+              isLoggedIn={isLoggedIn}
+              setIsLoggedIn={setIsLoggedIn}
+              cart={cart}
+              setCart={setCart}
+              showRegister={showRegister}
+              setShowRegister={setShowRegister}
+            />
           }
         />
+        {/* Menu Page */}
+<Route
+  path="/menu"
+  element={
+    <Menu
+      isLoggedIn={isLoggedIn}
+      cart={cart}
+      setCart={setCart}
+    />
+  }
+/>
+{/* About Page */}
+<Route
+  path="/about"
+  element={<About />}
+/>
 
+{/* Contact Page */}
+<Route
+  path="/contact"
+  element={<Contact />}
+/>
         {/* Cart Page */}
         <Route
           path="/cart"
@@ -232,7 +159,6 @@ function App() {
             />
           }
         />
-
       </Routes>
     </div>
   );
