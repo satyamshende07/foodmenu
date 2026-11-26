@@ -36,17 +36,25 @@ function Contact() {
   }
 };
 
-  const handleComplaintSubmit = (event) => {
-    event.preventDefault();
+  const handleComplaintSubmit = async (event) => {
+  event.preventDefault();
+
+  try {
+    await api.post("/complaints", complaint);
+
     setComplaintMessage("Your complaint has been submitted. Thank you!");
+
     setComplaint({
       name: "",
       email: "",
       category: "",
       message: "",
     });
-  };
-
+  } catch (error) {
+    console.error("Complaint submission failed:", error);
+    setComplaintMessage("Unable to submit complaint. Please try again.");
+  }
+};
   return (
     <main className="contact-page">
       <section className="contact-section">
